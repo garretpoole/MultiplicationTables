@@ -41,6 +41,10 @@ import SwiftUI
 //        }
 //    }
 //}
+struct Question {
+    var question = ""
+    var answer = 0
+}
 
 struct ContentView: View {
     @State private var showSettings = true
@@ -48,6 +52,7 @@ struct ContentView: View {
     @State private var timesTable = 2
     @State private var totalQuestions = 5
     @State private var difficulty = "easy"
+    @State private var questions = [Question]()
     
     let possibleQuestions = [5, 10, 15, 20]
     let difficulties = ["easy", "hard"]
@@ -87,6 +92,7 @@ struct ContentView: View {
                     
                 }
                 .navigationTitle("Multiply")
+                .onAppear(perform: generateQuestions)
                 .toolbar {
                     Button("Settings"){
                         showSettings = true
@@ -95,7 +101,38 @@ struct ContentView: View {
             }
         }
     }
+    
+    func generateQuestions() {
+        questions = [Question]()
+        var rand1: Int
+        var rand2: Int
+        switch difficulty{
+        case "easy":
+            for _ in (0..<totalQuestions) {
+                var tempQuestion = Question()
+                rand1 = Int.random(in: 2...timesTable)
+                rand2 = Int.random(in: 1...10)
+                tempQuestion.question = "\(rand1) * \(rand2)"
+                tempQuestion.answer = rand1 * rand2
+                questions.append(tempQuestion)
+            }
+        case "hard":
+            for _ in (0..<totalQuestions) {
+                var tempQuestion = Question()
+                rand1 = Int.random(in: 2...timesTable)
+                rand2 = Int.random(in: 10...100)
+                tempQuestion.question = "\(rand1) * \(rand2)"
+                tempQuestion.answer = rand1 * rand2
+                questions.append(tempQuestion)
+            }
+        default:
+            var error = Question()
+            error.question = "ERROR: no questions for this difficulty"
+            questions.append(error)
+        }
+    }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     
